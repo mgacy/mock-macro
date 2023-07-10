@@ -19,12 +19,15 @@ let package = Package(
         .macro(
             name: "MockMacroPlugin",
             dependencies: [
+                "Common",
                 .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
                 .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
             ]
         ),
+        // Types used by the macro and exported by the library.
+        .target(name: "Common", dependencies: []),
         // Library that exposes a macro as part of its API, which is used in client programs.
-        .target(name: "MockMacro", dependencies: ["MockMacroPlugin"]),
+        .target(name: "MockMacro", dependencies: ["Common", "MockMacroPlugin"]),
         // A client of the library, which is able to use the macro in its own code.
         .executableTarget(name: "MockMacroClient", dependencies: ["MockMacro"])
         // A test target used to develop the macro implementation.
